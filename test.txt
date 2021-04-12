@@ -1,0 +1,23 @@
+$remainingPO = Import-Csv "C:\Users\User\Desktop\BB PO\original.csv";
+$output_path = "C:\Users\User\Desktop\BB PO\output1";
+Write-Host $remainingPO.Count;
+While($remainingPO.Count -ne 0){
+	$downloadedPO = Get-ChildItem -Path "$($output_path)" -File | ForEach-Object {$_.ToString()};
+	$remainingPO = $remainingPO | Where-Object {$_.'file name' + '.pdf' -notin $downloadedPO};
+	If ($remainingPO.Count -ne 0){
+		Write-Host "$($remainingPO.Count) PO are not downloaded yet, re-download now.";
+	}
+	else
+	{
+		Write-Host "Finish!";
+	}
+
+	$i = 0;
+	foreach($PO in $remainingPO)
+	{
+		&"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --headless --run-all-compositor-stages-before-draw --virtual-time-budget=500000 --user-data-dir="C:\Users\User\AppData\Local\Google\Chrome\User Data" --print-to-pdf="$($output_path)\$($PO.'file name').pdf" https://vendorcentral.amazon.com/po/vendor/members/po-mgmt/order?poId=$($PO.'search PO on  amz website');
+		$i++;
+		Write-Host "$($i) / $($remainingPO.Count) $($PO.'file name') $($PO.'search PO on  amz website')";
+		sleep -second 5;
+	}
+}
