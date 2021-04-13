@@ -22,3 +22,7 @@ While($remainingPO.Count -ne 0){
 		sleep -Milliseconds $sleepDuration;
 	}
 }
+
+$userAgent = Import-Csv "C:\Users\User\Desktop\BB PO\user_agent_new.csv"
+$upperindexOfUserAgent = $userAgent.Count - 1
+Write-Host "$($userAgent[$(Get-Random -Minimum 0 -Maximum $($userAgent.Count - 1))].user_agent)"
