@@ -15,7 +15,15 @@ While($remainingPO.Count -ne 0){
 	$i = 0;
 	foreach($PO in $remainingPO)
 	{
-		&"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" --headless --disable-gpu --user-agent="$($userAgent[$(Get-Random -Minimum 0 -Maximum $($userAgent.Count - 1))].user_agent)" --run-all-compositor-stages-before-draw --virtual-time-budget=500000 --user-data-dir="C:\Users\User\AppData\Local\Google\Chrome\User Data" --print-to-pdf="$($output_path)\$($PO.'file name').pdf" https://vendorcentral.amazon.com/po/vendor/members/po-mgmt/order?poId=$($PO.'search PO on  amz website');
+		&"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe" `
+		--headless --disable-gpu `
+		--user-agent="$($userAgent[$(Get-Random -Minimum 0 -Maximum $($userAgent.Count - 1))].user_agent)" `
+		--run-all-compositor-stages-before-draw `
+		--virtual-time-budget=500000 `
+		--user-data-dir="C:\Users\User\AppData\Local\Google\Chrome\User Data" `
+		--print-to-pdf="$($output_path)\$($PO.'file name').pdf" `
+		https://vendorcentral.amazon.com/po/vendor/members/po-mgmt/order?poId=$($PO.'search PO on  amz website');
+
 		$i++;
 		$sleepDuration = Get-Random -Minimum 4000 -Maximum 7000;
 		Write-Host "$($i) / $($remainingPO.Count) $($PO.'file name') - $($sleepDuration)ms"; 
